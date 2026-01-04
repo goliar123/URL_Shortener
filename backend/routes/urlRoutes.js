@@ -7,7 +7,8 @@ import verify from '../middleware/verify.js';
 const router = express.Router()
 
 router.post("/url",verify,asyncHandler(async (req,res)=>{
-    const {shortCode,longCode,createdBy} = req.body;
+    const {shortCode,longCode} = req.body;
+    const createdBy = req.cookies.id;
     const response = await addShortCode({shortCode,longCode,createdBy})
 
     if(response.completed===true){
@@ -18,8 +19,8 @@ router.post("/url",verify,asyncHandler(async (req,res)=>{
     }
 }))
 
-router.get('/url',asyncHandler(async(req,res)=>{
-    const {createdBy} = req.body;
+router.get('/url',asyncHandler(async(req,res)=>{    
+    const createdBy = req.cookies.id;
     const response = await fetchUrl(createdBy);
     if(response.completed==true){
         if(response.response.length==0){
@@ -35,7 +36,8 @@ router.get('/url',asyncHandler(async(req,res)=>{
 }))
 
 router.delete('/delete',asyncHandler(async(req,res)=>{
-    const {createdBy,shortCode} = req.body;
+    const {shortCode} = req.body;
+    const createdBy = req.cookies.id;
     const response = await deleteUrl(createdBy,shortCode);
     if(response.completed==true){    
         if(response.response.deletedCount===0){
@@ -50,12 +52,14 @@ router.delete('/delete',asyncHandler(async(req,res)=>{
 
 router.get('/redirect/:shortCode',asyncHandler(async(req,res)=>{
     const shortCode = req.params.shortCode;
+    console.log(req.params);
+    
     const response = await updateInfo(shortCode,req);
     if(response.completed==true){    
         if(response.response.matchedCount===0){
             res.json({message:"No such URL exists"});
         }
-        else res.json({message:'Redirected Successfully'});
+        else res.redirect(response.longCode);
     }
     else{
         throw new Error("Error while Redirecting to the URL")

@@ -13,7 +13,6 @@ const addShortCode = async({shortCode,longCode,createdBy})=>{
 
 const fetchUrl = async(createdBy)=>{
     const response = await urlModel.find({createdBy:createdBy});
-    console.log(response);
     return {response,completed:true};
 
 }
@@ -24,7 +23,7 @@ const deleteUrl = async(createdBy,shortCode)=>{
 }
 
 const updateInfo = async(shortCode,req)=>{
-    const {createdBy} = req.body;
+    const createdBy = req.cookies.id;
     const time = new Date().toLocaleDateString();
     const response = await urlModel.updateOne({createdBy:createdBy,shortCode:shortCode},{
         $push:{
@@ -38,8 +37,8 @@ const updateInfo = async(shortCode,req)=>{
             clicks:1
         }
     });
-    console.log(response)    
-    return {response,completed:true};
+    const redirect = await urlModel.findOne({createdBy:createdBy,shortCode:shortCode})
+    return {response,completed:true,longCode:redirect.longCode};
 }
 
 export {addShortCode,fetchUrl,deleteUrl,updateInfo}

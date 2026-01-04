@@ -13,7 +13,8 @@ router.post('/login',asyncHandler(async (req,res)=>{
     if(response.completed===true){
         const token = jwt.sign({username:response.response.username,id:response.response._id},process.env.Secret_key)
         res.cookie('token',token,{httpOnly:true,maxAge:24*60*60*60})
-        res.json({message:'Login Successful'})
+        .cookie('id',response.response._id)
+        .json({message:'Login Successful'})
     }
     else{
         throw new Error({message:'Login UnSuccessful'});
