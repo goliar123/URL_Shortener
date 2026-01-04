@@ -2,6 +2,7 @@ import userModel from "../model/userSchema.js";
 
 const userLogin = async({username,password})=>{
     const response = await userModel.findOne({username:username});
+    if(response==null) return {completed:false}
     if(response.password===password){
         return {completed:true,response}
     }   

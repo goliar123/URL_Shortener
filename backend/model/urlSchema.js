@@ -10,7 +10,7 @@ const urlSchema = mongoose.Schema({
         required:true,
     },
     createdBy:{
-        type:String,
+        type:Schema.Types.ObjectId,
         required:true,
     },
     visitedHistory:[{

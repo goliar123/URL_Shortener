@@ -5,9 +5,9 @@ import dotenv from 'dotenv'
 
 const verify = asyncHandler((req,res,next)=>{
     const token = req.cookies.token
-    const response = jwt.verify(token,process.env.Secret_key)
+    const response = jwt.verify(token,process.env.Secret_key)    
     if(response){
-        res.user = response;
+        req.user = response;
         next();
     }
     else{
