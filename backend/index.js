@@ -21,6 +21,10 @@ const errorHandler = (err, req, res, next) => {
 };
 
 dotenv.config();
+app.use(cors({
+    origin: 'http://localhost:5173', // Frontend URL
+    credentials: true // Enable cookies
+}))
 app.use(express.json())
 app.use(urlencoded({extended:true}))
 app.use(cookieParser())
@@ -31,6 +35,7 @@ app.use(cors({
 app.use("/url",urlRouter)
 app.use("/user",userRouter)
 app.use(errorHandler)
+
 
 
 
