@@ -11,7 +11,6 @@ function Dashboard() {
   const [success, setSuccess] = useState('');
   const [creating, setCreating] = useState(false);
   const navigate = useNavigate();
-  const [clicks,setClicks] = useState(0);
 
   useEffect(() => {
     loadUrls();
@@ -167,7 +166,9 @@ function Dashboard() {
                         href={redirectToUrl(url.shortCode)}
                         target="_blank"
                         rel="noopener noreferrer"
-                        onClick={()=>setClicks(clicks+1)}
+                        onClick={async ()=>{
+                          await loadUrls();
+                        }}
                       >
                         {url.shortCode}
                       </a>
@@ -189,7 +190,7 @@ function Dashboard() {
                     </div>
                   </div>
                   <div className="url-stats">
-                    <span>👁️ Clicks: {clicks}</span>
+                    <span>👁️ Clicks: {url.clicks}</span>
                     <span>📅 Created: {new Date(url.createdAt).toLocaleDateString()}</span>
                   </div>
                 </div>
