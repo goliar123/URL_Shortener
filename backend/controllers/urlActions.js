@@ -22,12 +22,8 @@ const deleteUrl = async(createdBy,shortCode)=>{
     return {response,completed:true};
 }
 
-<<<<<<< HEAD
 const updateInfo = async(shortCode,req)=>{
     const createdBy = req.cookies.id;
-=======
-const updateInfo = async(shortCode,createdBy,req)=>{
->>>>>>> 9759897a0b76df175473ccf4ebdcdecc54368716
     const time = new Date().toLocaleDateString();
     const response = await urlModel.updateOne({createdBy:createdBy,shortCode:shortCode},{
         $push:{
@@ -41,13 +37,7 @@ const updateInfo = async(shortCode,createdBy,req)=>{
             clicks:1
         }
     });
-<<<<<<< HEAD
     const redirect = await urlModel.findOne({createdBy:createdBy,shortCode:shortCode})
-=======
-    const redirect = await urlModel.findOne({createdBy:createdBy,shortCode:shortCode});
-    console.log(redirect);
-    
->>>>>>> 9759897a0b76df175473ccf4ebdcdecc54368716
     return {response,completed:true,longCode:redirect.longCode};
 }
 
