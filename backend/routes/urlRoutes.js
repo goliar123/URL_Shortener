@@ -2,11 +2,12 @@ import express from 'express'
 import {addShortCode,deleteUrl,fetchUrl, updateInfo} from '../controllers/urlActions.js';
 import asyncHandler from 'express-async-handler' 
 import verify from '../middleware/verify.js';
+import { urlCreateShortCodeValidation,urlFetchValidation,urlDeleteValidation,urlRedirectValidation } from '../middleware/urlValidation.js';
 
 
 const router = express.Router();
 
-router.post("/url",verify,asyncHandler(async (req,res)=>{
+router.post("/url",urlCreateShortCodeValidation,verify,asyncHandler(async (req,res)=>{
     const {shortCode,longCode} = req.body;
     const createdBy = req.cookies.id;
     const response = await addShortCode({shortCode,longCode,createdBy})
@@ -19,7 +20,7 @@ router.post("/url",verify,asyncHandler(async (req,res)=>{
     }
 }))
 
-router.get('/url',asyncHandler(async(req,res)=>{    
+router.get('/url',urlFetchValidation,verify,asyncHandler(async(req,res)=>{    
     const createdBy = req.cookies.id;
     const response = await fetchUrl(createdBy);
     if(response.completed==true){
@@ -35,7 +36,7 @@ router.get('/url',asyncHandler(async(req,res)=>{
     }
 }))
 
-router.delete('/delete',asyncHandler(async(req,res)=>{
+router.delete('/delete',urlDeleteValidation,verify,asyncHandler(async(req,res)=>{
     const {shortCode} = req.body;
     const createdBy = req.cookies.id;
     const response = await deleteUrl(createdBy,shortCode);
@@ -50,9 +51,8 @@ router.delete('/delete',asyncHandler(async(req,res)=>{
     }
 }))
 
-router.get('/redirect/:shortCode',asyncHandler(async(req,res)=>{
+router.get('/redirect/:shortCode',urlRedirectValidation,asyncHandler(async(req,res)=>{
     const shortCode = req.params.shortCode;
-    
     const response = await updateInfo(shortCode,req);
     if(response.completed==true){    
         if(response.response.matchedCount===0){

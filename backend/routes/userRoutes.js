@@ -1,13 +1,14 @@
 import express from 'express'
 import asyncHandler from 'express-async-handler'
 import { userLogin,registerUser } from '../controllers/userActions.js'
+import userLoginValidation from '../middleware/userValidation.js'
 import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 
 const router = express.Router()
 dotenv.config()
 
-router.post('/login',asyncHandler(async (req,res)=>{    
+router.post('/login',userLoginValidation,asyncHandler(async (req,res)=>{    
     const {username,password} = req.body;
     
     const response = await userLogin({username,password});
@@ -22,7 +23,7 @@ router.post('/login',asyncHandler(async (req,res)=>{
     }
 }))
 
-router.post('/register',asyncHandler(async (req,res)=>{
+router.post('/register',userLoginValidation,asyncHandler(async (req,res)=>{
     const {username,password} = req.body;
     const response = await registerUser({username,password});
     if(response.completed===true){
