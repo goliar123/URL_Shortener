@@ -39,7 +39,8 @@ export const deleteUrl = async (shortCode) => {
 };
 
 export const redirectToUrl = (shortCode) => {
-  return `${API_BASE_URL}/url/redirect/${shortCode}`;
+  const str = `${API_BASE_URL}/url/redirect/${shortCode}`;
+  return str;  
 };
 
 export default api;
